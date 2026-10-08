@@ -1,0 +1,60 @@
+package com.enset.bankaccountservice.web;
+
+import com.enset.bankaccountservice.dto.BankAccountRequestDTO;
+import com.enset.bankaccountservice.dto.BankAccountResponseDTO;
+import com.enset.bankaccountservice.entities.BankAccount;
+import com.enset.bankaccountservice.entities.Customer;
+import com.enset.bankaccountservice.repositories.BankAccountRepository;
+import com.enset.bankaccountservice.repositories.CustomerRepository;
+import com.enset.bankaccountservice.service.AccountService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.stereotype.Controller;
+
+import java.util.List;
+
+@Controller
+public class BankAccountGraphQLController {
+
+    @Autowired
+    private BankAccountRepository bankAccountRepository;
+    @Autowired
+    private AccountService accountService;
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    @QueryMapping
+    public List<BankAccount> accountsList(){
+        return bankAccountRepository.findAll();
+    }
+
+    @QueryMapping
+    public BankAccount bankAccountById(@Argument String id){
+        return bankAccountRepository.findById(id)
+                        .orElseThrow(()-> new RuntimeException(String.format("account %s not found", id)));
+    }
+
+    @MutationMapping
+    public BankAccountResponseDTO addAccount(@Argument BankAccountRequestDTO bankAccount){
+        return accountService.addAccount(bankAccount);
+    }
+
+    @MutationMapping
+    public BankAccountResponseDTO updateAccount(@Argument String id, @Argument BankAccountRequestDTO bankAccount){
+        return accountService.updateAccount(id, bankAccount);
+    }
+
+    @MutationMapping
+    public void deleteAccount(@Argument String id){
+        bankAccountRepository.deleteById(id);
+    }
+
+    @QueryMapping
+    public List<Customer> customers(){
+        return customerRepository.findAll();
+    }
+}
+
+// record == class BankAccountDTO with annotations

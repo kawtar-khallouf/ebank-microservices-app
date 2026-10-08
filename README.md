@@ -23,7 +23,7 @@ Ce projet s'inscrit dans le cadre de l'apprentissage des architectures logiciell
 
 ## 🛠️ Technologies & Stack Technique
 
-- **Langage** : Java 21
+- **Langage** : Java 21.
 - **Framework** : Spring Boot 3.x
 - **Web & API** : Spring Web MVC, Spring Data REST, Spring for GraphQL
 - **Persistance** : Spring Data JPA, H2 Database (In-Memory)
